@@ -10,7 +10,7 @@ in your `Gemfile`
 ```ruby
 group :development do
   gem 'capistrano', '~> 2.15.5'
-  gem 'visionbundles', path: '../demrec'
+  gem 'visionbundles'
 end
 ```
 
