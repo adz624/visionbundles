@@ -88,6 +88,70 @@ This task provide a command `cap dev:build`, it will invoke tasks `tmp:clear` `l
 when you run this command, you have to type `Y` to confirm that you really want to run it.
 
 
+### Full setting example
+
+
+in `Capfile`
+
+```ruby
+load 'deploy'
+load 'deploy/assets'
+load 'config/deploy'
+```
+
+in `deploy.rb`
+
+```ruby
+require 'bundler/capistrano'
+require 'rvm/capistrano'
+require 'visionbundles'
+
+# RVM Settings
+set :rvm_ruby_string, '2.1.0'
+set :rvm_type, :user
+$:.unshift(File.expand_path('./lib', ENV['rvm_path']))
+
+# Recipes Settings
+include_recipes :nginx, :puma, :db, :dev
+
+# Nginx
+set :nginx_vhost_domain, '111.222.33.44'
+set :nginx_upstream_via_sock_file, false
+set :nginx_app_servers, ['127.0.0.1:9290']
+
+# Puma
+set :puma_bind_for, :tcp
+set :puma_bind_to, '127.0.0.1'
+set :puma_bind_port, '9290'
+set :puma_thread_min, 32
+set :puma_thread_max, 32
+set :puma_workers, 3
+
+# Role Settings
+server '11.222.33.44', :web, :app, :db, primary: true
+
+# Capistrano Base Setting
+set :application, 'my-project-name'
+set :user, 'rails'
+set :deploy_to, "/home/#{user}/apps/#{application}"
+set :deploy_via, :remote_cache
+set :use_sudo, false
+set :rails_env, 'test'
+
+# Git Settings
+set :scm, :git
+set :repository, "git@github.com:username/#{application}.git"
+set :branch, 'develop'
+
+# Others
+default_run_options[:pty] = true
+ssh_options[:forward_agent] = true
+
+# Deploy Flow
+after 'deploy', 'deploy:cleanup' # keep only the last 5 releases
+```
+
+
 ## Other tools
 
 [ubuntu-rails-app-installer](https://github.com/afunction/ubuntu-rails-app-installer) is a server tool for install basic rails production environment and this script write on `shellscript`, you can use it to install nginx, percona database, basic secure setting, firewall, rails deploy user ... etc.
