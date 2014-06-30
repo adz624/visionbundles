@@ -66,7 +66,7 @@ set :puma_workers, 3
 
 If you include this recipe, when you run `cap deploy:setup` will copy database config file from your project `config/database.example.yml` to server site shared path.
 
-If database config file exists in remote server, will not replace. so if you change nginx / puma configuration and you want to reset again, you can run `cap deploy:setup` again.
+If database config file exists in remote server, it will NOT overwrite. so if you change nginx or puma config in `deploy.rb` and you want to re-generator and overwrite to server, you just run `cap deploy:setup` again.
 
 ### sidekiq (role: :workers)
 
@@ -74,14 +74,14 @@ If database config file exists in remote server, will not replace. so if you cha
 `cap sidekiq:stop`
 `cap sidekiq:restart`
 
-P.S this task is not test.
+P.S this task still not be tested.
 
 
 ### dev (role: :app)
 
 This task provide a command `cap dev:build`, it will invoke tasks `tmp:clear` `log:clear` `db:drop` `db:create` `db:migrate` `db:seed` on remote server.
 
-when you run this command, you have to type `Y` to confirm that you really want to run it.
+This command will show a prompt box to confirm that you really want to run it.
 
 
 ### Full setting example
