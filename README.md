@@ -20,8 +20,6 @@ then run `bundle install`
 ## deploy.rb
 
 ```ruby
-# deploy.rb
-
 # add this line on top
 require 'visionbundles'
 
