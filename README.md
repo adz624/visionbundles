@@ -29,7 +29,7 @@ require 'visionbundles'
 include_recipes :nginx, :puma, :db, :dev
 ```
 
-once you include recipes like `db` `nginx` `puma` it will hook in your deploy flow, you just need run `cap deploy:setup` at first, it will setup all you need. but you have to config your recipes setting.
+once you include recipes like `db` `nginx` `puma` it will hook tasks in your deploy flow, you just need run `cap deploy:setup` at first, it will setup all you need. but you have to config your recipes setting.
 
 
 ## Recipes configurations
