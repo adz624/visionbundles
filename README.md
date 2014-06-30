@@ -32,10 +32,9 @@ once you include recipes like `db` `nginx` `puma` it will hook tasks in your dep
 
 ## Recipes configurations
 
-### nginx
+### nginx (role: :web)
 
 ```ruby
-# Nginx (role: :web)
 set :nginx_vhost_domain, 'your.domain' # default is _, means all
 set :nginx_upstream_via_sock_file, false, # if your app server bind a unix socket file, you need setup to true
 
@@ -50,7 +49,6 @@ set :nginx_app_servers, ['127.0.0.1:9290'] # your app server ip with port
 ### puma (role: :app)
 
 ```ruby
-# Puma
 set :puma_bind_for, :tcp # default is 'sock_file'
 set :puma_bind_to, '127.0.0.1' # default is '0.0.0.0'
 set :puma_bind_port, '9290' # default is 9292
