@@ -41,4 +41,12 @@ if defined?(Capistrano)
   def current_server
     capture("echo $CAPISTRANO:HOST$").strip
   end
+
+  def info(message)
+    puts message.to_s.colorize(:light_cyan)
+  end
+
+  def warn(message)
+    puts message.to_s.colorize(:red)
+  end
 end

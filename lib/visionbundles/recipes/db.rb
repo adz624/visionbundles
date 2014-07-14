@@ -5,9 +5,9 @@ Capistrano::Configuration.instance(:must_exist).load do
       mkdir("#{shared_path}/config")
       database_setting_path = "#{shared_path}/config/database.yml"
       if remote_file_exists?(database_setting_path)
-        puts '[SKIP] Database configuration exists already ...'.colorize(:red)
+        warn '[SKIP] Database configuration exists already ...'
       else
-        puts '[Shared] Setup database configuration files ...'.colorize(:light_cyan)
+        info '[Shared] Setup database configuration files ...'
         put File.read("config/database.example.yml"), database_setting_path
       end
     end

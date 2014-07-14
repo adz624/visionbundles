@@ -9,7 +9,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   namespace :nginx do
     desc "setup nginx vhost config"
     task :setup, roles: :web do
-      puts '[Nginx] Setup vhost configuration files ...'.colorize(:light_cyan)
+      info '[Nginx] Setup vhost configuration files ...'
       template "templates/nginx/nginx.conf.erb", "#{shared_path}/nginx", "vhost.conf"
       sudo "ln -nfs #{shared_path}/nginx/vhost.conf /etc/nginx/sites-enabled/#{application}"
     end
