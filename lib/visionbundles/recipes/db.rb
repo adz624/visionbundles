@@ -18,6 +18,6 @@ Capistrano::Configuration.instance(:must_exist).load do
       run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
     end
     after "deploy:finalize_update", "db:symlink_config"
-    before 'deploy:symlink', 'deploy:migrate'
+    before 'deploy:create_symlink', 'deploy:migrate'
   end
 end
