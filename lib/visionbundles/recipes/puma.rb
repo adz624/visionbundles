@@ -8,7 +8,7 @@ Capistrano::Configuration.instance(:must_exist).load do
 
   namespace :puma do
     desc "Setup Puma Scripts"
-    task :setup do
+    task :setup, roles: :app do
       info '[Puma] copying the config'
       template "templates/puma/config.erb", "#{shared_path}/puma", "config.rb"
     end
