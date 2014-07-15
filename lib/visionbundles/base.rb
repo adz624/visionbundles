@@ -33,7 +33,6 @@ if defined?(Capistrano)
     end
   end
 
-
   def set_default(name, *args, &block)
     set(name, *args, &block) unless exists?(name)
   end
@@ -48,5 +47,14 @@ if defined?(Capistrano)
 
   def warn(message)
     puts message.to_s.colorize(:red)
+  end
+
+  def have_primary_database?
+    roles[:db].each do |server|
+      if server.options[:primary]
+        return true
+      end
+    end
+    return false
   end
 end

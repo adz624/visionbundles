@@ -1,4 +1,5 @@
 Capistrano::Configuration.instance(:must_exist).load do
+
   namespace :db do
     desc "setup database configuration"
     task :setup, roles: :app do
@@ -17,7 +18,17 @@ Capistrano::Configuration.instance(:must_exist).load do
     task :symlink_config, roles: :app do
       run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
     end
+
+    desc "Detect migration"
+    task :detect_and_run_migration do 
+      if have_primary_database?
+        find_and_execute_task 'db:migrate'
+      else
+        warn "[SKIP MIGRATE] Not Found Primary Database ..."
+      end
+    end
+
     after "deploy:finalize_update", "db:symlink_config"
-    before 'deploy:create_symlink', 'deploy:migrate'
+    before 'deploy:create_symlink', 'db:detect_and_run_migration'
   end
 end
