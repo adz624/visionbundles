@@ -50,7 +50,7 @@ if defined?(Capistrano)
   end
 
   def have_primary_database?
-    roles[:db].each do |server|
+    roles[:app].each do |server|
       if server.options[:primary]
         return true
       end
