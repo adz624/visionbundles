@@ -57,6 +57,20 @@ if defined?(Capistrano)
     puts "#{current_server} -> #{message}".to_s.colorize(:red)
   end
 
+  def copy_production_from_local(local_file, remote_file)
+    mkdir("#{shared_path}/template")
+    remote_full_path = "#{shared_path}/template/#{remote_file}"
+    File.read("config/#{local_file}"), remote_full_path
+
+    remote_full_path
+  end
+
+  def overwrite_config!(config_file)
+    origin_config_path = "#{shared_path}/template/#{config_file}"
+    replace_config_path = "#{shared_path}/config/#{config_file}"
+    run "cp #{origin_config_path} #{replace_config_path}"
+  end
+
   def have_primary_database?
     roles[:app].each do |server|
       if server.options[:primary]
