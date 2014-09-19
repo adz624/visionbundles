@@ -15,7 +15,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     after 'deploy:setup', 'db:setup'
 
     desc "setup database symlink for every time deploy"
-    task :symlink_config, roles: :app do
+    task :symlink_config, roles: [:app, :web] do
       run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
     end
     after "deploy:finalize_update", "db:symlink_config"
