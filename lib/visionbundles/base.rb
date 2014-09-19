@@ -23,6 +23,14 @@ if defined?(Capistrano)
     !results.empty?
   end
 
+  def run_if_file_exists?(path, command)
+    run "if [ -f '#{path}']; then #{command}; fi"
+  end
+
+  def run_if_file_not_exists?(path, command)
+    run "if [ ! -f '#{path}']; then #{command}; fi"
+  end
+
   def mkdir(remote_path)
     run "mkdir -p #{remote_path}"
   end

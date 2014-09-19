@@ -2,27 +2,26 @@ Capistrano::Configuration.instance(:must_exist).load do
 
   namespace :db do
     desc "setup database configuration for application server"
-    task "setup", roles: :app do
+    task "setup", roles: [:app, :web] do
+      # It will overwrite template database
+      mkdir("#{shared_path}/template")
+      template_database_path = "#{shared_path}/template/database.yml"
+      put File.read("config/database.example.yml"), template_database_path
+      info '[Template] Copy Database Template'
+
+      # It will check if shared database config exists will not over write
       mkdir("#{shared_path}/config")
       database_setting_path = "#{shared_path}/config/database.yml"
-      if remote_file_exists?(database_setting_path)
-        warn '[SKIP] Database configuration exists already ...'
-      else
-        info "[Shared] Setup database configuration files ... "
-        put File.read("config/database.example.yml"), database_setting_path
-      end
+
+      run_if_file_not_exists?(database_setting_path, "cp #{template_database_path} #{database_setting_path}")
     end
     after 'deploy:setup', 'db:setup'
 
     desc "setup database symlink for every time deploy"
-    task :symlink_config, roles: :app do
+    task :symlink_config, roles: [:app, :web] do
       run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
     end
 
-    desc "web compile assets needs database configuration file"
-    task :copy_example_database_config_for_assets_compiler, roles: :web do
-      run "cp #{release_path}/config/database.example.yml #{release_path}/config/database.yml"
-    end
-    after "deploy:finalize_update", "db:copy_example_database_config_for_assets_compiler", "db:symlink_config"
+    after "deploy:finalize_update", "db:symlink_config"
   end
 end
