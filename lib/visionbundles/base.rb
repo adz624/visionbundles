@@ -60,15 +60,19 @@ if defined?(Capistrano)
   def copy_production_from_local(local_file, remote_file)
     mkdir("#{shared_path}/template")
     remote_full_path = "#{shared_path}/template/#{remote_file}"
-    File.read("config/#{local_file}"), remote_full_path
+    put File.read("config/#{local_file}"), remote_full_path
 
     remote_full_path
   end
 
   def overwrite_config!(config_file)
-    origin_config_path = "#{shared_path}/template/#{config_file}"
+    origin_config_path = production_config(config_file)
     replace_config_path = "#{shared_path}/config/#{config_file}"
     run "cp #{origin_config_path} #{replace_config_path}"
+  end
+
+  def production_config(config_file)
+    "#{shared_path}/template/#{config_file}"
   end
 
   def have_primary_database?

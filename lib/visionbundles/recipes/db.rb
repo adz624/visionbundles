@@ -14,6 +14,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       # It will check if shared database config exists will not over write
       mkdir("#{shared_path}/config")
       database_setting_path = "#{shared_path}/config/database.yml"
+      template_database_path = production_config('database.yml')
       run_if_file_not_exists?(database_setting_path, "cp #{template_database_path} #{database_setting_path}")
     end
     after 'deploy:setup', 'db:copy_production_config', 'db:setup'
