@@ -24,11 +24,11 @@ if defined?(Capistrano)
   end
 
   def run_if_file_exists?(path, command)
-    run "if [ -f '#{path}']; then #{command}; fi"
+    run "if [ -f '#{path}' ]; then #{command}; fi"
   end
 
   def run_if_file_not_exists?(path, command)
-    run "if [ ! -f '#{path}']; then #{command}; fi"
+    run "if [ ! -f '#{path}' ]; then #{command}; fi"
   end
 
   def mkdir(remote_path)
