@@ -1,4 +1,6 @@
 Capistrano::Configuration.instance(:must_exist).load do
+  
+  set_default(:database_template, 'database.production.yml')
 
   namespace :db do
     desc "setup database configuration for application server"
@@ -6,7 +8,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       # It will overwrite template database
       mkdir("#{shared_path}/template")
       template_database_path = "#{shared_path}/template/database.yml"
-      put File.read("config/database.example.yml"), template_database_path
+      put File.read("config/#{database_template}"), template_database_path
       info '[Template] Copy Database Template'
 
       # It will check if shared database config exists will not over write
