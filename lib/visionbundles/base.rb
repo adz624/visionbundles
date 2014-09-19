@@ -42,11 +42,11 @@ if defined?(Capistrano)
   end
 
   def info(message)
-    puts message.to_s.colorize(:light_cyan)
+    puts "#{current_server} -> #{message}".to_s.colorize(:light_cyan)
   end
 
   def warn(message)
-    puts message.to_s.colorize(:red)
+    puts "#{current_server} -> #{message}".to_s.colorize(:red)
   end
 
   def have_primary_database?

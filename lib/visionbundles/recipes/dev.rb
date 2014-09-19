@@ -14,9 +14,8 @@ Capistrano::Configuration.instance(:must_exist).load do
 
     desc "dev:build task"
     task :build, roles: :app do
-      unless have_primary_database?
-        return warn "Not Found Primary Database"
-      end
+      return warn "Not Found Primary Database" unless have_primary_database?
+      
       if dev_sure_danger_command == 'Y'
         ["tmp:clear", "log:clear", "db:drop", "db:create", "db:migrate", "db:seed"].each do |rake_command|
           run "cd #{current_path}; bundle exec rake #{rake_command} RAILS_ENV=#{rails_env}"
