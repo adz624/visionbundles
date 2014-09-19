@@ -25,5 +25,10 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
 
     after "deploy:finalize_update", "db:symlink_config"
+
+    desc "remove database config file"
+    task :remove_config, roles: [:app, :web] do
+      run "#{shared_path}/config/database.yml"
+    end
   end
 end
