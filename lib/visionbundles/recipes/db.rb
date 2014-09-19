@@ -19,6 +19,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       run "ln -nfs #{shared_path}/config/database.yml #{release_path}/config/database.yml"
     end
 
+    desc "web compile assets needs database configuration file"
     task :copy_example_database_config_for_assets_compiler, roles: :web do
       run "cp #{release_path}/config/database.example.yml #{release_path}/config/database.yml"
     end
