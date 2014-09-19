@@ -28,7 +28,7 @@ Capistrano::Configuration.instance(:must_exist).load do
 
     desc "remove database config file"
     task :remove_config, roles: [:app, :web] do
-      run "#{shared_path}/config/database.yml"
+      run "rm #{shared_path}/config/database.yml"
     end
   end
 end
