@@ -16,7 +16,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       template_secret_path = production_config('secret_token.rb')
       run_if_file_not_exists?(secret_file_path, "cp #{template_secret_path} #{secret_file_path}")
     end
-    after 'deploy:setup', 'secret:copy_production_config' 'secret:setup'
+    after 'deploy:setup', 'secret:copy_production_config', 'secret:setup'
 
     desc "setup secret file symlink for every time deploy"
     task :symlink, roles: :app do
