@@ -35,7 +35,7 @@ require 'visionbundles'
 include_recipes :nginx, :puma, :db, :dev
 ```
 
-Once you include recipes like `db` `nginx` `puma` ... etc, it will hook tasks in your deploy flow, and you need run `cap deploy:setup` at first time, it will setup all you need. but you have to config your recipes setting before.
+Once you include recipes like `db` `nginx` `puma` ... etc, it will hook tasks in your deploy flow, and you need to run `cap deploy:setup` at first time, it will setup all you need. but you have to config your recipes setting before.
 
 
 ## Recipe configurations
@@ -75,7 +75,7 @@ set :puma_workers, 3
 
 Source: https://github.com/afunction/visionbundles/blob/master/lib/visionbundles/recipes/puma.rb
 
-### fast_assets
+### fast_assets (locally)
 
 If you have multiple app servers, or separate servers between app and web roles, or your assets on CDN, you may concern about? which role of servers with responsibility to compile assets and upload to servers?
 
@@ -102,7 +102,7 @@ set :cdn, {
 }
 ```
 
-More details about cdn configuration, please visit: https://github.com/rumblelabs/asset_sync
+Once you choice upload assets to CDN, deploy task will not upload assets file on your web server, cause web doesn't need. more details about cdn configuration, please visit: https://github.com/rumblelabs/asset_sync
 
 Source: https://github.com/afunction/visionbundles/blob/master/lib/visionbundles/recipes/fast_assets.rb
 
