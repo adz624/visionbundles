@@ -1,5 +1,6 @@
 require 'erb'
 require 'colorize'
+require 'yaml' # STEP ONE, REQUIRE YAML!
 if defined?(Capistrano)
   def from_template(file)
     abs_path = File.join(File.dirname(__FILE__), file)
@@ -82,5 +83,18 @@ if defined?(Capistrano)
       end
     end
     return false
+  end
+
+  def config_from_yaml(file_path)
+    config = YAML::load_file("./#{file_path}")[rails_env.to_s]
+    config ||= {config: {}, servers: []}
+    config['config'].each do |key, value|
+      send(:set, key, value)
+    end
+    config['servers'].each do |server|
+      roles = server['roles'].is_a?(Array) ? server['roles'].map(&:to_sym) : [ server['roles'].to_sym ]
+      roles.push(server['opts']) if server['opts'].present? 
+      send(:server, server['host'], *roles)
+    end
   end
 end
