@@ -77,7 +77,8 @@ Source: https://github.com/afunction/visionbundles/blob/master/lib/visionbundles
 
 ### fast_assets (locally)
 
-If you have multiple app servers, or separate servers between app and web roles, or your assets on CDN, you may concern about? which role of servers with responsibility to compile assets and upload to servers?
+If you have multiple app servers, or separate servers between app and web roles, or your assets on CDN, you may concern which server is resiponsible to compile assets and upload to servers.
+
 
 This task will use least resource to compile assets and upload to remote server. it combine [Gem - AssetSync](https://github.com/rumblelabs/asset_sync) and compile assets locally instead of capistrano precompile task. 
 
@@ -102,7 +103,7 @@ set :cdn, {
 }
 ```
 
-Once you choice upload assets to CDN, deploy task will not upload assets file on your web server, cause web doesn't need. more details about cdn configuration, please visit: https://github.com/rumblelabs/asset_sync
+Once you choose upload assets to CDN, deploy task will NOT upload asset files to your web server, because web dose not need it. For more details about CDN configuration, please visit: https://github.com/rumblelabs/asset_sync
 
 Source: https://github.com/afunction/visionbundles/blob/master/lib/visionbundles/recipes/fast_assets.rb
 
