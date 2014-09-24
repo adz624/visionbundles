@@ -5,7 +5,7 @@ Capistrano::Configuration.instance(:must_exist).load do
 
   namespace :dev do
     desc "Run a task on a remote server."  
-    task :invode, roles: :app do 
+    task :invoke, roles: :app do 
       command = "cd #{current_path}; /usr/bin/env bundle exec rake #{ENV['task']} RAILS_ENV=#{rails_env}"
       info "Are you sure to run:"
       info command
@@ -13,7 +13,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
 
     desc "dev:build task"
-    task :build, roles: :app do
+    task :build, roles: :db, primary: true do
       return warn "Not Found Primary Database" unless have_primary_database?
       
       if dev_sure_danger_command == 'Y'

@@ -1,9 +1,15 @@
 ## Summary
 
-This gem have basic deploy flow tasks for capistrano 2.x, that include templates (nginx / puma / sidekiq). you don't have to write deploy tasks yourself, just configuare it.
+This gem with basic deploy flow tasks for capistrano 2.15.5, you don't have to write deploy tasks yourself, just configuare it. And that includes recipes:
+
+1. nginx
+2. puma
+3. db
+4. secret
+5. fast_assets 
+6. dev
 
 ## Installation
-
 
 in your `Gemfile`
 
@@ -11,6 +17,8 @@ in your `Gemfile`
 group :development do
   gem 'capistrano', '~> 2.15.5'
   gem 'visionbundles'
+  # or use latest source
+  # gem 'visionbundles', github: 'afunction/visionbundles'
 end
 ```
 
@@ -20,17 +28,17 @@ then run `bundle install`
 ## deploy.rb
 
 ```ruby
-# add this line on top
+# Add this line on top
 require 'visionbundles'
 
-# setup recipes what your need (nginx, puma, db, dev)
+# Setup recipes what you need (include option nginx, puma, db, dev, fast_assets, secret)
 include_recipes :nginx, :puma, :db, :dev
 ```
 
-once you include recipes like `db` `nginx` `puma` it will hook tasks in your deploy flow, you just need run `cap deploy:setup` at first, it will setup all you need. but you have to config your recipes setting.
+Once you include recipes like `db` `nginx` `puma` ... etc, it will hook tasks in your deploy flow, and you need run `cap deploy:setup` at first time, it will setup all you need. but you have to config your recipes setting before.
 
 
-## Recipes configurations
+## Recipe configurations
 
 ### nginx (role: :web)
 
@@ -45,8 +53,12 @@ set :nginx_app_servers, ['127.0.0.1:9290'] # your app server ip with port
 `cap nginx:stop`
 `cap nginx:restart`
 
+Source: https://github.com/afunction/visionbundles/blob/master/lib/visionbundles/recipes/nginx.rb
+
 
 ### puma (role: :app)
+
+If you have multiple app server, you should setup `puma_bind_to` to `0.0.0.0`, and use other way to avoid directly connection to your app server form internet.
 
 ```ruby
 set :puma_bind_for, :tcp # default is 'sock_file'
@@ -61,31 +73,70 @@ set :puma_workers, 3
 `cap puma:stop`
 `cap puma:restart`
 
+Source: https://github.com/afunction/visionbundles/blob/master/lib/visionbundles/recipes/puma.rb
+
+### fast_assets
+
+If you have multiple app servers, or separate servers between app and web roles, or your assets on CDN, you may concern about? which role of servers with responsibility to compile assets and upload to servers?
+
+This task will use least resource to compile assets and upload to remote server. it combine [Gem - AssetSync](https://github.com/rumblelabs/asset_sync) and compile assets locally instead of capistrano precompile task. 
+
+
+*Without CDN*
+
+You don't have to configure it, just add `fast_assets` recipe in your `deploy.rb`, it will compile assets locally, and upload `manifest file` to servers of app role and `assets files` to servers of web role.
+
+
+*With CDN*
+
+After include `fast_assets`recipe, you have to config your CDN access token, it will use [asset_sync](https://github.com/rumblelabs/asset_sync) to upload your assets to cloud, the example below using AWS S3:
+
+```ruby
+# CDN
+set :cdn, {
+  fog_provider: 'AWS',
+  fog_directory: 'your_bucket_name',
+  aws_access_key_id: 'your aws id', # create from IAM
+  aws_secret_access_key: 'your aws secret token',
+  fog_region: 'ap-northeast-1' # bucket region
+}
+```
+
+More details about cdn configuration, please visit: https://github.com/rumblelabs/asset_sync
+
+Source: https://github.com/afunction/visionbundles/blob/master/lib/visionbundles/recipes/fast_assets.rb
 
 ### db (role: :app)
 
-If you include this recipe, when you run `cap deploy:setup` will copy database config file from your project `config/database.example.yml` to server site shared path.
+To avoid setting up db configuration manually, setup task will copy `config/database.production.yml` to your servers with `roles: :app`, and you can create the file with REAL production db configuration, and list the file to `.gitignore` to avoid sensitive data in your source control.
 
-If database config file exists in remote server, it will NOT overwrite. so if you change nginx or puma config in `deploy.rb` and you want to re-generator and overwrite to server, you just run `cap deploy:setup` again.
 
-### sidekiq (role: :workers)
+*cap db:reset_config*
 
-`cap sidekiq:start`
-`cap sidekiq:stop`
-`cap sidekiq:restart`
+The setup task will not overwide db config file if exists in remote server, but i also can use `cap db:reset_config` to replace your remote db config from local.
 
-P.S this task still not be tested.
+Source: https://github.com/afunction/visionbundles/blob/master/lib/visionbundles/recipes/db.rb
 
+### Secret (role: :app)
+
+Setup task will copy `initializers/secret_token.production.rb` to your servers which roles is app, like db recipes, you should create the file, and list in `.gitignore`.
+
+*cap secret:reset_config*
+
+Just like `db:reset_config` functionality.
+
+Source: https://github.com/afunction/visionbundles/blob/master/lib/visionbundles/recipes/secret.rb
 
 ### dev (role: :app)
 
-This task provide a command `cap dev:build`, it will invoke tasks `tmp:clear` `log:clear` `db:drop` `db:create` `db:migrate` `db:seed` on remote server.
+This task provide a command `cap dev:build`, it will invoke tasks `tmp:clear` `log:clear` `db:drop` `db:create` `db:migrate` `db:seed` on the server (same server which runs db:migrate).
 
-This command will show a prompt box to confirm that you really want to run it.
+This command will show a prompt box to confirm that you really want to do it.
+
+Source: https://github.com/afunction/visionbundles/blob/master/lib/visionbundles/recipes/dev.rb
 
 
 ### Full setting example
-
 
 in `Capfile`
 
