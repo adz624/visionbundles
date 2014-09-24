@@ -137,6 +137,54 @@ This command will show a prompt box to confirm that you really want to do it.
 Source: https://github.com/afunction/visionbundles/blob/master/lib/visionbundles/recipes/dev.rb
 
 
+## Setup each environment config via yaml
+
+You may think server architecture details should not in source control, or often update to different website in same project. you can use yaml easy to switch configuration. below is the example:
+
+
+* deploy.rb *
+
+```ruby
+config_from_yaml 'deploy/config.yml', :my_testing_production
+```
+
+* deploy/config.yml *
+
+```yaml
+# Nginx
+my_testing_production:
+  servers:
+    - host: '1.1.1.1'
+      roles: 
+        - 'web'
+        - 'app'
+        - 'db'
+      opts:
+        primary: yes
+    - host: '2.2.2.2'
+      roles: 'app'
+  config:
+    nginx_vhost_domain: 'my.domain.com'
+    nginx_upstream_via_sock_file: no
+    nginx_app_servers:
+      - 192.168.1.3:9290
+      - 192.168.1.4:9290
+    # Puma
+    puma_bind_for: 'tcp'
+    puma_bind_port: '9290'
+    puma_thread_min: 32
+    puma_thread_max: 32
+    puma_workers: 3
+    cdn:
+      fog_provider: 'AWS'
+      fog_directory: ''
+      aws_access_key_id: ''
+      aws_secret_access_key: ''
+      fog_region: 'ap-northeast-1'
+
+```
+
+
 ### Full setting example
 
 in `Capfile`
