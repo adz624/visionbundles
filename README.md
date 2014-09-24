@@ -83,12 +83,12 @@ If you have multiple app servers, or separate servers between app and web roles,
 This task will use least resource to compile assets and upload to remote server. it combine [Gem - AssetSync](https://github.com/rumblelabs/asset_sync) and compile assets locally instead of capistrano precompile task. 
 
 
-*Without CDN*
+**Without CDN**
 
 You don't have to configure it, just add `fast_assets` recipe in your `deploy.rb`, it will compile assets locally, and upload `manifest file` to servers of app role and `assets files` to servers of web role.
 
 
-*With CDN*
+**With CDN**
 
 After include `fast_assets`recipe, you have to config your CDN access token, it will use [asset_sync](https://github.com/rumblelabs/asset_sync) to upload your assets to cloud, the example below using AWS S3:
 
@@ -112,7 +112,7 @@ Source: https://github.com/afunction/visionbundles/blob/master/lib/visionbundles
 To avoid setting up db configuration manually, setup task will copy `config/database.production.yml` to your servers with `roles: :app`, and you can create the file with REAL production db configuration, and list the file to `.gitignore` to avoid sensitive data in your source control.
 
 
-*cap db:reset_config*
+**cap db:reset_config**
 
 The setup task will not overwide db config file if exists in remote server, but i also can use `cap db:reset_config` to replace your remote db config from local.
 
@@ -122,7 +122,7 @@ Source: https://github.com/afunction/visionbundles/blob/master/lib/visionbundles
 
 Setup task will copy `initializers/secret_token.production.rb` to your servers which roles is app, like db recipes, you should create the file, and list in `.gitignore`.
 
-*cap secret:reset_config*
+**cap secret:reset_config**
 
 Just like `db:reset_config` functionality.
 
@@ -142,13 +142,13 @@ Source: https://github.com/afunction/visionbundles/blob/master/lib/visionbundles
 You may think server architecture details should not in source control, or you often update to different website in same project. you can use yaml easy to switch configuration. below is the example:
 
 
-* deploy.rb *
+**deploy.rb**
 
 ```ruby
 config_from_yaml 'deploy/config.yml', :my_testing_production
 ```
 
-* deploy/config.yml *
+**deploy/config.yml**
 
 ```yaml
 # Nginx
