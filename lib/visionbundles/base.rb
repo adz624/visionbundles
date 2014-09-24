@@ -85,8 +85,8 @@ if defined?(Capistrano)
     return false
   end
 
-  def config_from_yaml(file_path)
-    config = YAML::load_file("./#{file_path}")[rails_env.to_s]
+  def config_from_yaml(file_path, env)
+    config = YAML::load_file("./#{file_path}")[env.to_s]
     config ||= {config: {}, servers: []}
     config['config'].each do |key, value|
       send(:set, key, value)
