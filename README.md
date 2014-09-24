@@ -137,9 +137,9 @@ This command will show a prompt box to confirm that you really want to do it.
 Source: https://github.com/afunction/visionbundles/blob/master/lib/visionbundles/recipes/dev.rb
 
 
-## Setup each environment config via yaml
+## Maintain multiple deploy settings by yaml
 
-You may think server architecture details should not in source control, or often update to different website in same project. you can use yaml easy to switch configuration. below is the example:
+You may think server architecture details should not in source control, or you often update to different website in same project. you can use yaml easy to switch configuration. below is the example:
 
 
 * deploy.rb *
@@ -156,13 +156,13 @@ my_testing_production:
   servers:
     - host: '1.1.1.1'
       roles: 
-        - 'web'
-        - 'app'
-        - 'db'
+        - :web
+        - :app
+        - :db
       opts:
         primary: yes
     - host: '2.2.2.2'
-      roles: 'app'
+      roles: :app
   config:
     nginx_vhost_domain: 'my.domain.com'
     nginx_upstream_via_sock_file: no
@@ -170,7 +170,7 @@ my_testing_production:
       - 192.168.1.3:9290
       - 192.168.1.4:9290
     # Puma
-    puma_bind_for: 'tcp'
+    puma_bind_for: :tcp
     puma_bind_port: '9290'
     puma_thread_min: 32
     puma_thread_max: 32
