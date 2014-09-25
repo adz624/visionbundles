@@ -93,7 +93,7 @@ if defined?(Capistrano)
     end
     config['servers'].each do |server|
       roles = server['roles'].is_a?(Array) ? server['roles'].map(&:to_sym) : [ server['roles'].to_sym ]
-      roles.push(server['opts']) if server['opts'].present? 
+      roles.push(server['opts']) if server['opts'].is_a?(Hash)
       send(:server, server['host'], *roles)
     end
   end
