@@ -6,11 +6,13 @@ Capistrano::Configuration.instance(:must_exist).load do
     nginx_upstream_via_sock_file ? "/tmp/#{application}.sock" : "127.0.0.1:9292"
   }
 
+  set_default(:nginx_config_template) { "../templates/nginx/nginx.conf.erb" }
+
   namespace :nginx do
     desc "setup nginx vhost config"
     task :setup, roles: :web do
       info '[Nginx] Setup vhost configuration files ...'
-      template "templates/nginx/nginx.conf.erb", "#{shared_path}/nginx", "vhost.conf"
+      template nginx_config_template, "#{shared_path}/nginx", "vhost.conf"
       sudo "ln -nfs #{shared_path}/nginx/vhost.conf /etc/nginx/sites-enabled/#{application}"
     end
     after 'deploy:setup', 'nginx:setup'

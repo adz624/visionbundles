@@ -1,2 +1,2 @@
 require "visionbundles/version"
-require "visionbundles/base"
+require "visionbundles/helpers" if defined?(Capistrano)

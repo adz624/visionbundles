@@ -5,12 +5,13 @@ Capistrano::Configuration.instance(:must_exist).load do
   set_default(:puma_thread_min, 1)
   set_default(:puma_thread_max, 16)
   set_default(:puma_workers, 0)
+  set_default(:puma_config_template) { "../templates/puma/config.erb" }
 
   namespace :puma do
     desc "Setup Puma Scripts"
     task :setup, roles: :app do
       info '[Puma] copying the config'
-      template "templates/puma/config.erb", "#{shared_path}/puma", "config.rb"
+      template puma_config_template, "#{shared_path}/puma", "config.rb"
     end
     after 'deploy:setup', 'puma:setup'
 
