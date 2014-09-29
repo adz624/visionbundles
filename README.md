@@ -110,7 +110,7 @@ Source: https://github.com/afunction/visionbundles/blob/master/lib/visionbundles
 
 ### [recipes] preconfig (role: :app, :web, :worker)
 
-To avoid setting up configuration manually and some security reason, this gem provide a way to protect your sensitive production config, you can write production preconfiguration files out of source control, and your `preconfig_files` method to setup the configuration map between local and remote server.
+To avoid setting up configuration manually and some security reason, this gem provide a way to protect your sensitive production config, you can write production preconfiguration files out of source control, and use `preconfig_files` method to setup the configuration map between local and remote server.
 
 ```ruby
 # config/deploy.rb
