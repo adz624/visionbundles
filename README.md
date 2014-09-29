@@ -4,10 +4,11 @@ This gem with basic deploy flow tasks for capistrano 2.15.5, you don't have to w
 
 1. nginx
 2. puma
-3. db
-4. secret
-5. fast_assets 
-6. dev
+3. preconfig (new feature)
+4. db
+5. secret
+6. fast_assets 
+7. dev
 
 ## Installation
 
@@ -40,7 +41,7 @@ Once you include recipes like `db` `nginx` `puma` ... etc, it will hook tasks in
 
 ## Recipe configurations
 
-### nginx (role: :web)
+### [recipes] nginx (role: :web)
 
 ```ruby
 set :nginx_vhost_domain, 'your.domain' # default is _, means all
@@ -56,7 +57,7 @@ set :nginx_app_servers, ['127.0.0.1:9290'] # your app server ip with port
 Source: https://github.com/afunction/visionbundles/blob/master/lib/visionbundles/recipes/nginx.rb
 
 
-### puma (role: :app)
+### [recipes] puma (role: :app)
 
 If you have multiple app server, you should setup `puma_bind_to` to `0.0.0.0`, and use other way to avoid directly connection to your app server form internet.
 
@@ -75,7 +76,7 @@ set :puma_workers, 3
 
 Source: https://github.com/afunction/visionbundles/blob/master/lib/visionbundles/recipes/puma.rb
 
-### fast_assets (locally)
+### [recipes] fast_assets (locally)
 
 If you have multiple app servers, or separate servers between app and web roles, or your assets on CDN, you may concern which server is resiponsible to compile assets and upload to servers.
 
@@ -107,28 +108,38 @@ Once you choose upload assets to CDN, deploy task will NOT upload asset files to
 
 Source: https://github.com/afunction/visionbundles/blob/master/lib/visionbundles/recipes/fast_assets.rb
 
-### db (role: :app)
+### [recipes] preconfig (role: :app, :web, :worker)
 
-To avoid setting up db configuration manually, setup task will copy `config/database.production.yml` to your servers with `roles: :app`, and you can create the file with REAL production db configuration, and list the file to `.gitignore` to avoid sensitive data in your source control.
+To avoid setting up configuration manually and some security reason, this gem provide a way to protect your sensitive production config, you can write production preconfiguration files out of source control, and your `preconfig_files` method to setup the configuration map between local and remote server.
+
+```ruby
+# config/deploy.rb
+set :preconfig_dir, "../production_config/" # default is "./preconfig", if you use defauls, you should add preconfig folder to .gitignore
+set :preconfig_roles, [:web, :app, :worker, :other] # default is [:web, :app, :worker]
+
+preconfig_files "settings.yml" => 'config/settings.yml', "exception_setting.yml" => "config/exception_setting.yml"
+```
+
+When your run `deploy:setup` it will sync those files `settings.yml` `exception_setting.yml` from `preconfig_dir` to your server, and it also make those files `symlinks` to release path in your deploy flow.
 
 
-**cap db:reset_config**
+*This recipes is required already, you don't have to include it again.*
 
-The setup task will not overwide db config file if exists in remote server, but i also can use `cap db:reset_config` to replace your remote db config from local.
+**tasks:**
 
-Source: https://github.com/afunction/visionbundles/blob/master/lib/visionbundles/recipes/db.rb
+* `cap preconfig:upload_config` (upload all preconfig files to server shared path)
 
-### Secret (role: :app)
 
-Setup task will copy `initializers/secret_token.production.rb` to your servers which roles is app, like db recipes, you should create the file, and list in `.gitignore`.
+Source: https://github.com/afunction/visionbundles/blob/master/lib/visionbundles/recipes/preconfig.rb
 
-**cap secret:reset_config**
+### [recipes] db (role: :app)
 
-Just like `db:reset_config` functionality.
+It depends on `preconfig` recipe, by default, you have to put the production `database.yml` in `preconfig/` of your project.
+
 
 Source: https://github.com/afunction/visionbundles/blob/master/lib/visionbundles/recipes/secret.rb
 
-### dev (role: :app)
+### [recipes] dev (role: :app)
 
 This task provide a command `cap dev:build`, it will invoke tasks `tmp:clear` `log:clear` `db:drop` `db:create` `db:migrate` `db:seed` on the server (same server which runs db:migrate).
 
