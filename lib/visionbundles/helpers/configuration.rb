@@ -10,7 +10,10 @@ module Visionbundles
         end
         config['servers'].each do |server|
           roles = server['roles'].is_a?(Array) ? server['roles'].map(&:to_sym) : [ server['roles'].to_sym ]
-          roles.push(server['opts']) if server['opts'].is_a?(Hash)
+          if server['opts'].is_a?(Hash)
+            options = Hash[server['opts'].map { |k, y| [k.to_sym, y] }]
+            roles.push(options)
+          end
           send(:server, server['host'], *roles)
         end
       end
