@@ -1,0 +1,26 @@
+development:
+  adapter: mysql2
+  encoding: utf8
+  database: your_database_name_development
+  pool: 5
+  username: root
+  password:
+  host: ''
+
+test:
+  adapter: mysql2
+  encoding: utf8
+  database: your_database_name_test
+  pool: 5
+  username: root
+  password: 
+  host: ''
+
+production:
+  adapter: mysql2
+  encoding: utf8
+  database: your_database_name_production
+  pool: 50
+  username: root
+  password:
+  host: ''
