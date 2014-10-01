@@ -16,7 +16,7 @@ in your `Gemfile`
 
 ```ruby
 group :development do
-  gem 'capistrano', '~> 2.15.5'
+  gem 'capistrano', '~> 2.15.5', require: false
   gem 'visionbundles', '~> 0.2.0'
   # or use latest source
   # gem 'visionbundles', github: 'afunction/visionbundles'
