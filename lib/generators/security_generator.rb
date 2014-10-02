@@ -1,29 +1,16 @@
 require 'rails/generators'
 module Visionbundles
   module Generators
-    class ConfigGenerator < Rails::Generators::Base
-      source_root File.expand_path("../../templates", __FILE__)
-      argument :deploy_template, type: :string, default: "single"
+    class SecurityGenerator < Rails::Generators::Base
+      source_root File.expand_path("../templates", __FILE__)
 
+      # check and add first commit for this project
       def git_init
         run 'git init; git add .; git commit -m "init project"' unless File.exists?('.git')
         run 'git reset .'
       end
 
-      def copy_deploy_template
-        copy_file "Capfile", "Capfile"
-        copy_file "deploy.rb", "config/deploy.rb"
-        run 'git add Capfile; git add config/deploy.rb; git commit -m "Init visionbundle deploy setting."'
-      end
-
-      def add_capistrano_rvm
-        gem_group :development do
-          gem 'rvm-capistrano'
-        end
-        run 'bundle install'
-        run 'git add Gemfile*; git commit -m "add gem capistrano-rvm and bundle install."'
-      end
-
+      # copy exists database config to predefine folder
       def create_database_example_config
         if File.exists?('config/database.yml')
           copy_file "#{Rails.root}/config/database.yml", "config/database.example.yml"
@@ -36,6 +23,7 @@ module Visionbundles
         run 'git commit -m "create a database config template!"'
       end
 
+      # check and ignore database config out of source control
       def out_of_database_config_from_source_control
         if `git ls-files config/database.yml` != ''
           run 'git rm config/database.yml'
@@ -44,8 +32,8 @@ module Visionbundles
 
         append_file ".gitignore" do
           <<-eos
-/preconfig/ # production preconfig folder
-/config/database.yml" # should not in source control
+          /preconfig/ # production preconfig folder
+          /config/database.yml" # should not in source control
           eos
         end
         run 'git add .gitignore'

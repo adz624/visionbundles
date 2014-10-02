@@ -1,7 +1,7 @@
 module Visionbundles
   class Engine < Rails::Engine
     generators do
-      require "generators/config/config_generator"
+      require "generators/install_generator"
     end
   end
 end
