@@ -25,18 +25,14 @@ end
 then run `bundle install`
 
 
-## Recipes
+## Wiki
 
+* [Getting Started](https://github.com/afunction/visionbundles/wiki/Getting-Started)
 * [Recipe - Nginx](https://github.com/afunction/visionbundles/wiki/%5BRecipe%5D-nginx)
 * [Recipe - Puma](https://github.com/afunction/visionbundles/wiki/%5BRecipe%5D-puma)
 * [Recipe - fast_assets (compile assets locally)](https://github.com/afunction/visionbundles/wiki/%5BRecipe%5D-fast_assets)
 * [Recipe - preconfig](https://github.com/afunction/visionbundles/wiki/%5BRecipe%5D--preconfig)
 * [Recipe - db, dev](https://github.com/afunction/visionbundles/wiki/%5BRecipe%5D-db,-dev)
-
-
-## Wiki
-
-* [Getting Started](https://github.com/afunction/visionbundles/wiki/Getting-Started)
 * [Using yaml to protect and easy to switch your deploy.rb](https://github.com/afunction/visionbundles/wiki/Using-yaml-to-protect-and-easy-to-switch-your-deploy.rb)
 
 
