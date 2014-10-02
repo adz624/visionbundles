@@ -48,3 +48,6 @@ Just send PR to me.
 # Contact me
 
 eddie [at] visionbundles [dot] com 
+
+
+![Visionbundles Int'l Ltd.](http://www.visionbundles.com/assets/logo-927ee5bf7632c30e2642ddf03b607e42.png)
