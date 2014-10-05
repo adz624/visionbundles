@@ -78,7 +78,8 @@ Capistrano::Configuration.instance(:must_exist).load do
       # TODO:
       # => 1. check if deploy user setup already.
       # => 2. check database setup already.
-      # => 3. check servers have premission access git server
+      # => 3. check remote servers have permission to access git server
+      # => 4. check local have permission to access remote servers
     end
   end
 end
