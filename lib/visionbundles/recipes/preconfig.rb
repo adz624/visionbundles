@@ -60,7 +60,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       if destination_preconfigurations.empty?
         valid_pass "Preconfig destination: #{preconfig_files_list.map(&:last).join(', ')}"
       else
-        valid_faild "Have to remove from source control files: #{remote_preconfigurations.join(', ')}"
+        valid_faild "Have to remove from source control files: #{destination_preconfigurations.join(', ')}"
       end
     end
 
