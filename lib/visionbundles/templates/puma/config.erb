@@ -123,9 +123,11 @@ workers <%= puma_workers %>
 #
 
 on_worker_boot do
-  ActiveSupport.on_load(:active_record) do
-    ActiveRecord::Base.establish_connection
-  end
+  <% if preload_app && puma_on_boot_connection_to_activerecord %>
+    ActiveSupport.on_load(:active_record) do
+      ActiveRecord::Base.establish_connection
+    end
+  <% end %>
 end
 
 # Code to run when a worker boots to setup the process after booting
@@ -142,22 +144,20 @@ end
 # is preserved across a phased-restart. (incompatible with preload_app)
 # (off by default)
 
-# prune_bundler
+<%= if puma_prune_bundler then 'prune_bundler' end %>
 
 # Preload the application before starting the workers; this conflicts with
 # phased restart feature. (off by default)
 
-<% if puma_preload_app %>
-  preload_app!
-<% end %>
+<%= if puma_preload_app then 'preload_app!' end %>
 
 # Additional text to display in process listing
 #
-# tag 'gambling'
+tag '<%= application %>'
 
 # Change the default timeout of workers
 #
-# worker_timeout 60
+<%= if puma_worker_timeout then "worker_timeout #{puma_worker_timeout}" end %>
 
 # === Puma control rack application ===
 
