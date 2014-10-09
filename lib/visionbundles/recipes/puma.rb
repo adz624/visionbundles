@@ -6,6 +6,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   set_default(:puma_thread_max, 16)
   set_default(:puma_workers, 0)
   set_default(:puma_config_template) { "../templates/puma/config.erb" }
+  set_default(:puma_preload_app) { true }
 
   namespace :puma do
     desc "Setup Puma Scripts"

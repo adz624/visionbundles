@@ -147,7 +147,9 @@ end
 # Preload the application before starting the workers; this conflicts with
 # phased restart feature. (off by default)
 
-preload_app!
+<% if puma_preload_app %>
+  preload_app!
+<% end %>
 
 # Additional text to display in process listing
 #
