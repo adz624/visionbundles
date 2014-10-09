@@ -17,6 +17,10 @@ module Visionbundles
       def valid_faild(topic)
         puts "\t[Pass] #{topic}".colorize(color: :red, background: :light_white).underline
       end
+
+      def valid_skip(topic)
+        puts "\t[Skip] #{topic}".colorize(color: :yellow, background: :light_white).underline
+      end
     end
   end
 end

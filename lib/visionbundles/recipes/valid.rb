@@ -42,16 +42,20 @@ Capistrano::Configuration.instance(:must_exist).load do
 
     desc "Check remote servers have permission to access git server"
     task :git_deploy_key_checker, on_error: :continue do
-      find_servers.map { |server|
-        Thread.new {
-          host = server.to_s
-          if capture("git ls-remote #{repository}", hosts: host).strip.include?('Permission denied (publickey).')
-            valid_faild "Server: #{host} cannot access git repo: #{repository}"
-          else
-            valid_pass "Server: #{host} have git repo permission access."
-          end
-        }
-      }.each { |task| task.join }
+      if scm == :git
+        find_servers.map { |server|
+          Thread.new {
+            host = server.to_s
+            if capture("git ls-remote #{repository}", hosts: host).strip.include?('Permission denied (publickey).')
+              valid_faild "Server: #{host} cannot access git repo: #{repository}"
+            else
+              valid_pass "Server: #{host} have git repo permission access."
+            end
+          }
+        }.each { |task| task.join }
+      else
+        valid_skip "skip valid if remote servers have git pull permission."
+      end
     end
   end
   after 'deploy:valid', 'valid:server_connection', 'valid:git_deploy_key_checker'
