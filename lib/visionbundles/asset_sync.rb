@@ -6,5 +6,9 @@ module AssetSync
     def log_silently
       false
     end
+
+    def yml_exists?
+      false
+    end
   end
 end
