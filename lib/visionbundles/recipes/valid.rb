@@ -28,12 +28,11 @@ Capistrano::Configuration.instance(:must_exist).load do
             ssh server.to_s, 'echo "test_connection"', user: user
           rescue; end
         end
-        servers[server.to_s] = { connection: connection }
+        servers[server.to_s] = connection.value
       end
 
       servers.each do |host, data|
-        response = servers[host][:connection].value
-        if response.nil?
+        if servers[host].nil?
           valid_faild "Server: #{host} connection faild. please check firewall, ssh service and make sure public is in right place on your server."
         else
           valid_pass "Server: #{host} connection successful."
