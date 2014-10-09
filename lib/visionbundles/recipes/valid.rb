@@ -3,7 +3,7 @@ require 'net/ssh/simple'
 Capistrano::Configuration.instance(:must_exist).load do
   namespace :deploy do
     desc "validate settings"
-    task :valid do
+    task :valid, on_error: :continue do
       # Capistrano initial checker
       not_found_files = (capistrano_files = %w(./Capfile ./config/deploy.rb)).map { |file|
         file unless File.exists?(file)
@@ -19,7 +19,7 @@ Capistrano::Configuration.instance(:must_exist).load do
 
   namespace :valid do
     desc 'check if server connection ok'
-    task :server_connection do
+    task :server_connection, on_error: :continue do
       # Servers connection
       servers = {}
       find_servers.each do |server|
@@ -41,8 +41,16 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
 
     desc "Check remote servers have permission to access git server"
-    task :git_deploy_key_checker do
-      # TODO: make sure every web and apps have permission to access git repo.
+    task :git_deploy_key_checker, on_error: :continue do
+      find_servers.each do |server|
+        host = server.to_s
+        response = capture("git ls-remote #{repository}", hosts: host).strip
+        if response.include?('Permission denied (publickey).')
+          valid_faild "Server: #{host} cannot access git repo: #{repository}"
+        else
+          valid_pass "Server: #{host} have git repo permission access."
+        end
+      end
     end
   end
   after 'deploy:valid', 'valid:server_connection', 'valid:git_deploy_key_checker'
