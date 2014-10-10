@@ -4,7 +4,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   preconfig_files('database.yml' => 'config/database.yml')
 
   namespace :db do
-    desc 'check if each servers (web, app, db) can authenticate and connection the database'
+    desc 'check if each servers (web, app, db) can authenticate and connect to database'
     task :valid do
       db = YAML::load_file("./#{preconfig_dir}/database.yml")[rails_env.to_s]
 
