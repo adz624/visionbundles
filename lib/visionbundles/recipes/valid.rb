@@ -19,7 +19,7 @@ Capistrano::Configuration.instance(:must_exist).load do
 
   namespace :valid do
     desc 'check if server connection ok'
-    task :server_connection, on_error: :continue do
+    task :remote_server_connection, on_error: :continue do
       # Servers connection
       servers = {}
       find_servers.each do |server|
@@ -58,5 +58,5 @@ Capistrano::Configuration.instance(:must_exist).load do
       end
     end
   end
-  after 'deploy:valid', 'valid:server_connection', 'valid:git_deploy_key_checker'
+  after 'deploy:valid', 'valid:remote_server_connection', 'valid:git_deploy_key_checker'
 end
