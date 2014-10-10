@@ -23,4 +23,5 @@ Capistrano::Configuration.instance(:must_exist).load do
       }.each { |task| task.join }
     end
   end
+  after 'deploy:valid', 'db:valid'
 end
