@@ -55,7 +55,7 @@ Capistrano::Configuration.instance(:must_exist).load do
             config.manifest_path = run_locally("ls #{assets_dir}/manifest*").strip!
             config.assets_prefix = 'assets'
             config.public_path = './public'
-            
+
             cdn.each do |option, value|
               config.send("#{option}=", value)
             end
@@ -65,9 +65,31 @@ Capistrano::Configuration.instance(:must_exist).load do
         end
       end
     end
-
     before "deploy:assets:symlink", "deploy:assets:remove_manifest"
     after "deploy:assets:precompile", "deploy:assets:sync_manifest_to_app_servers",
       "deploy:assets:sync_assets_files", "deploy:assets:cleanup"
+  end
+
+  namespace :fast_assets do
+    desc "check is local git commit same as the branch that deploying."
+    task :valid do
+      local_current_commit = `git rev-parse HEAD`.split(' ').strip.last[0..7]
+      # if setup commit id on branch variable
+      if local_current_commit.include?(branch.to_s)
+        valid_pass "fast_assets need same commit id between local (#{local_current_commit}) and remote (#{branch})"
+      else
+        remote_branch_commit = `git ls-remote #{repository} #{branch}`.strip
+        if remote_branch_commit.blank?
+          valid_faild "Not found remote branch: #{branch}"
+          exit
+        elsif (deploying_commit = (remote_branch_commit.split(' ').first || '')[0..7]) == local_current_commit
+          valid_pass "fast_assets need same commit id between local (#{local_current_commit}) and remote (#{deploying_commit})"
+        else
+          valid_faild "Local HEAD commit is (#{local_current_commit}), please checkout local branch to \"#{branch} (#{deploying_commit})\" same as you deployed."
+          exit
+        end
+      end
+    end
+    before 'deploy:update', 'fast_assets:valid'
   end
 end
