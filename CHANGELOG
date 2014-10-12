@@ -1,1 +1,8 @@
 0.3.0
+
+* Add base valid task `deploy:valid` include git, and remote server connection
+* Add db valid task called `db:valid` to check if all server have permission to access db
+* Add secret file rails version checker (4.0 use `secret_token.rb`, 4.1 use `secrets.yml`)
+* Add fast_assets valid task, it valid if local commit same as deploying version (because compile assets locally)
+* Add more options for puma setting (preload_app, puma_worker_timeout, puma_prune_bundler, .. etc)
+* Change method `config_from_yaml` to `load_config_from`
