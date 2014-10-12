@@ -1,9 +1,15 @@
-# 0.2.1
+0.3.0
 
-1. 重新思考 deploy.rb 的使用方式包括 (preconfig, config_from_yaml)
-2. 完成 `cap visionbundles:valid`
+validation tasks
 
+* servers connection
+* security
+* db access
+* fast_assets
+* git pull access
 
-# 0.3.0
+0.3.1
 
-1. 實作 deploy:install 系列 (nginx, db, rvm .. etc)
+* database validation when use socket file situational
+* fast_assets CDN validation
+* scp validation (should find a easy way to implement it)
