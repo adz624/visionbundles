@@ -73,7 +73,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   namespace :fast_assets do
     desc "check is local git commit same as the branch that deploying."
     task :valid do
-      local_current_commit = `git rev-parse HEAD`.split(' ').strip.last[0..7]
+      local_current_commit = `git rev-parse HEAD`.strip.split(' ').last[0..7]
       # if setup commit id on branch variable
       if local_current_commit.include?(branch.to_s)
         valid_pass "fast_assets need same commit id between local (#{local_current_commit}) and remote (#{branch})"
