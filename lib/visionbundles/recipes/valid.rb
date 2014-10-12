@@ -35,7 +35,8 @@ Capistrano::Configuration.instance(:must_exist).load do
         find_servers.map { |server|
           Thread.new {
             host = server.to_s
-            if capture("git ls-remote #{repository}", hosts: host).strip.include?('Permission denied (publickey).')
+            # TODO: have to change a way to check response with git ls-remote (branch may named `denied`)
+            if capture("echo `git ls-remote #{repository} 2>&1`", hosts: host).strip.include?('denied')
               valid_faild "Server: #{host} cannot access git repo: #{repository}"
             else
               valid_pass "Server: #{host} have git repo permission access."
