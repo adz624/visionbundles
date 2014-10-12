@@ -3,18 +3,7 @@ require 'net/ssh/simple'
 Capistrano::Configuration.instance(:must_exist).load do
   namespace :deploy do
     desc "validate settings"
-    task :valid, on_error: :continue do
-      # Capistrano initial checker
-      not_found_files = (capistrano_files = %w(./Capfile ./config/deploy.rb)).map { |file|
-        file unless File.exists?(file)
-      }.compact
-
-      if not_found_files.empty?
-        valid_pass "Capistrano file exists: #{capistrano_files.join(', ')}"
-      else
-        valid_faild "Not found file #{not_found_files.join(', ')}, you should run `capify .` to initial capistrano setting."
-      end
-    end
+    task :valid, on_error: :continue do; end
   end
 
   namespace :valid do
