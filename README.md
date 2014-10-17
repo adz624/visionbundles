@@ -1,6 +1,4 @@
-[![Code Climate](https://codeclimate.com/github/afunction/visionbundles/badges/gpa.svg)](https://codeclimate.com/github/afunction/visionbundles)
-
-[![security](https://hakiri.io/github/afunction/visionbundles/master.svg)](https://hakiri.io/github/afunction/visionbundles/master)
+[![Code Climate](https://codeclimate.com/github/afunction/visionbundles/badges/gpa.svg)](https://codeclimate.com/github/afunction/visionbundles) [![security](https://hakiri.io/github/afunction/visionbundles/master.svg)](https://hakiri.io/github/afunction/visionbundles/master)
 
 ## Summary
 
