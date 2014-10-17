@@ -1,3 +1,5 @@
+[![Code Climate](https://codeclimate.com/github/afunction/visionbundles/badges/gpa.svg)](https://codeclimate.com/github/afunction/visionbundles)
+
 ## Summary
 
 This gem is the basic deploy recipes for capistrano 2.15.5, the recipes includes tasks hooks around capistrano deploy tasks, and configuration template for each service (like nginx, puma .. etc), you don't have to write deploy tasks yourself, just configure it. And below is all recipes:
