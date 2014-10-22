@@ -2,7 +2,7 @@ require 'visionbundles/asset_sync'
 
 Capistrano::Configuration.instance(:must_exist).load do
   set_default(:precompile_env)   { rails_env }
-  set_default(:precompile_cmd)   { "RAILS_ENV=#{precompile_env.to_s.shellescape} #{asset_env} #{rake} assets:copy_env_precompile" }
+  set_default(:precompile_cmd)   { "RAILS_ENV=#{precompile_env.to_s.shellescape} #{asset_env} #{rake} assets:precompile_locally" }
   set_default(:cleanexpired_cmd) { "RAILS_ENV=#{rails_env.to_s.shellescape} #{asset_env} #{rake} assets:clean_expired" }
   set_default(:rsync_cmd) { "rsync -av" }
 
