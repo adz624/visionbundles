@@ -4,7 +4,9 @@ namespace :assets do
   end
 
   task :precompile_locally => :environment do
-    Rails.application.assets.version = ENV['remote_assets_version']
+    Rails.application.assets.instance_eval {
+      @version = ENV['remote_assets_version']
+    }
     Rake::Task['assets:precompile'].invoke
   end
 end
