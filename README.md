@@ -17,10 +17,11 @@ This gem is the basic deploy recipes for capistrano 2.15.5, the recipes includes
 in your `Gemfile`
 
 ```ruby
+gem 'visionbundles', '~> 0.3.0'
+# gem 'visionbundles', github: 'afunction/visionbundles' # or use latest source
+
 group :development do
   gem 'capistrano', '~> 2.15.5', require: false
-  gem 'visionbundles', '~> 0.2.0'
-  # gem 'visionbundles', github: 'afunction/visionbundles' # or use latest source
 end
 ```
 
