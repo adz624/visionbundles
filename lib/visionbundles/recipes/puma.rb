@@ -19,10 +19,15 @@ Capistrano::Configuration.instance(:must_exist).load do
     end
     after 'deploy:setup', 'puma:setup'
 
-    %w[start stop restart stats status phased-restart].each do |command|
+    desc "start puma"
+    task :start, roles: :app do
+      run "cd #{current_path} && RAILS_ENV=#{rails_env} bundle exec puma -C #{shared_path}/puma/config.rb start"
+    end
+
+    %w[stop restart stats status phased-restart].each do |command|
       desc "#{command} puma server"
       task command, roles: :app do
-        run "cd #{current_path} && RAILS_ENV=#{rails_env} bundle exec pumactl -F #{shared_path}/puma/config.rb #{command}"
+        run "cd #{current_path} && RAILS_ENV=#{rails_env} bundle exec pumactl -S #{shared_path}/pids/puma.state #{command}"
       end
     end
   end
