@@ -98,9 +98,13 @@ threads <%= puma_thread_min %>, <%= puma_thread_max %>
 #
 # This can be called multiple times to add code each time.
 #
-# on_restart do
-#   puts 'On restart...'
-# end
+
+<% if puma_reload_gem_when_restart %> 
+  on_restart do
+    puts 'Refreshing Gemfile'
+    ENV["BUNDLE_GEMFILE"] = "<%= "#{current_path}/Gemfile" %>"
+  end
+<% end %>
 
 # Command to use to restart puma. This should be just how to
 # load puma itself (ie. 'ruby -Ilib bin/puma'), not the arguments

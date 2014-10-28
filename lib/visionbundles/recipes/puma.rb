@@ -10,6 +10,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   set_default(:puma_prune_bundler) { false }
   set_default(:puma_worker_timeout) { nil }
   set_default(:puma_on_boot_connection_to_activerecord) { nil }
+  set_default(:puma_reload_gem_when_restart) { true }
 
   namespace :puma do
     desc "Setup Puma Scripts"
