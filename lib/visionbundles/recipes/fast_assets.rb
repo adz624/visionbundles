@@ -26,9 +26,8 @@ Capistrano::Configuration.instance(:must_exist).load do
       desc "Precompile assets locally"
       task :precompile, only: { primary: true }, on_no_matching_servers: :continue do
         server = find_servers(roles: :app, except: { no_release: true }).first
-        remote_assets_version = capture("cd #{release_path}; RAILS_ENV=#{precompile_env.to_s.shellescape} bundle exec rake assets:remote_assets_version", hosts: server.to_s).strip
-        puts remote_assets_version.inspect
-        run_locally "#{precompile_cmd} remote_assets_version=#{remote_assets_version}"
+        remote_assets_host = capture("cd #{release_path}; RAILS_ENV=#{precompile_env.to_s.shellescape} bundle exec rake assets:remote_assets_host", hosts: server.to_s).strip
+        run_locally "#{precompile_cmd} remote_assets_host=#{remote_assets_host}"
       end
 
       desc "Sync manifest on app servers"
