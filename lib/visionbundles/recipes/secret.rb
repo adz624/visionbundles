@@ -5,7 +5,7 @@ Capistrano::Configuration.instance(:must_exist).load do
     if major == 4 && [0, 1].include?(minor)
       source, desc = case minor
       when 0 then; ['secret_token.rb', 'config/initializers/secret_token.rb']
-      when 1 then; ['secrets.yml', 'config/config/secrets.yml']
+      when 1 then; ['secrets.yml', 'config/secrets.yml']
       end
       preconfig_files(source => desc)
     else
