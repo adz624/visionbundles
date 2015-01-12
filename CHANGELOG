@@ -1,3 +1,9 @@
+0.3.2
+
+* Refactor the secret, db tasks in recipes, preconfig instead.
+* Refactor and recipes file structure.
+* Add an executable shell script to "/init.d/#{application} start|stop|restart", when server boot will run app.
+
 0.3.1
 
 * Resolve wrong assets host when compile assets locally. dynamic get `Application.assets.version` from remote and set the same value in local for compile assets [sprockets-rails](https://github.com/rails/sprockets-rails/blob/53f640ed38a509253e869305eb4de7ce3d5cb776/lib/sprockets/railtie.rb#L74)
