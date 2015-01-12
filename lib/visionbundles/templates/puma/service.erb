@@ -1,0 +1,19 @@
+#! /bin/sh
+
+case "$1" in
+  <% %w(stop restart).each do |command| %>
+  <%= command %>)
+    su -l -c "cd <%= current_path %> && RAILS_ENV=<%= rails_env %> bundle exec pumactl -S <%= shared_path %>/pids/puma.state <%= command %>" <%= user %>
+    ;;
+  <% end %>
+  start)
+    echo "Starting <%= application%> application"
+    su -l -c "cd <%= current_path %> && RAILS_ENV=<%= rails_env %> bundle exec puma -C <%= shared_path %>/puma/config.rb start" <%= user %>
+    ;;
+  *)
+    echo "Usage: /etc/init.d/<%= application %> {start|stop|restart}"
+    exit 1
+    ;;
+esac
+
+exit 0
