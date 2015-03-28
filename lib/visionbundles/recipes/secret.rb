@@ -6,7 +6,7 @@ Capistrano::Configuration.instance(:must_exist).load do
   end
 
   major, minor = Rails::VERSION::STRING.split('.').map(&:to_i)
-  if major == 4 && [0, 1].include?(minor)
+  if major == 4 && [0, 1, 2].include?(minor)
     source, desc = case minor
     when 0 then; ['secret_token.rb', 'config/initializers/secret_token.rb']
     when 1 then; ['secrets.yml', 'config/secrets.yml']
