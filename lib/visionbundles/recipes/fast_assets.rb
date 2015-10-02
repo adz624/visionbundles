@@ -26,7 +26,7 @@ Capistrano::Configuration.instance(:must_exist).load do
       desc "Precompile assets locally"
       task :precompile, only: { primary: true }, on_no_matching_servers: :continue do
         server = find_servers(roles: :app, except: { no_release: true }).first
-        remote_assets_host = capture("cd #{release_path}; RAILS_ENV=#{precompile_env.to_s.shellescape} bundle exec rake assets:remote_assets_host", hosts: server.to_s).strip
+        remote_assets_host = capture("cd #{release_path}; RAILS_ENV=#{precompile_env.to_s.shellescape} bundle exec rake assets:remote_assets_host", hosts: server.to_s).strip.split("\n").last
         run_locally "#{precompile_cmd} remote_assets_host=#{remote_assets_host}"
       end
 
@@ -45,12 +45,14 @@ Capistrano::Configuration.instance(:must_exist).load do
       desc "Sync assets to CDN or remote app server"
       task :sync_assets_files, only: { primary: true }, on_no_matching_servers: :continue do
         if cdn.nil?
+          puts "FILE"
           # If not using CDN, web should have asset files
           find_servers(roles: :web, except: { no_release: true }).each do |server|
             server_with_user = "#{user}@#{server}"
             run_locally "#{rsync_cmd} ./#{assets_dir}/ #{server_with_user}:#{release_path}/#{assets_dir}/"
           end
         else
+          puts "CDN"
           # Use AssetSync Gem to sync assets list to cloud
           # https://github.com/rumblelabs/asset_sync/blob/master/lib/tasks/asset_sync.rake#L5
           AssetSync.configure do |config|

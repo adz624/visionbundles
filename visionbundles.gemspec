@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.license          = 'MIT'
 
   s.add_dependency 'asset_sync', '~> 1.1.0'
-  s.add_dependency 'fog', '~> 1.23.0'
+  s.add_dependency 'fog'
   s.add_dependency 'colorize', '~> 0'
   s.add_dependency 'net-ssh-simple', '~> 1.6.6'
 end
